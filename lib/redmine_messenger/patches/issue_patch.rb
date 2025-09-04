@@ -61,13 +61,17 @@ module RedmineMessenger
           #                  url: send_messenger_mention_url(project, description),
           #                  user: author),
           #                channels, url, attachment: attachment, project: project
+          begin
           msg = l(:label_messenger_issue_created,
                             project_url: Messenger.project_url_markdown(project),
                             url: send_messenger_mention_url(project, description),
-                            user: current_journal.user)
+                            user: author)
           map_redmin_uid_to_discord_uid =  Messenger.map_redmin_uid_to_discord_uid
           discord_mention_userId = map_redmin_uid_to_discord_uid[self.assigned_to_id.to_s]
-          Messenger.send_to_discord(url,build_discord_params(discord_mention_userId,msg))                  
+          Messenger.send_to_discord(url,build_discord_params(discord_mention_userId,msg))
+          rescue => e 
+              puts e.inspect
+          end                  
         end
 
         def send_messenger_update
@@ -121,7 +125,7 @@ module RedmineMessenger
 
         private
         def build_discord_params(assigned_to_id,msg)
-            discord_params = {'content' =>"<@#{assigned_to_id}>#{msg}"}
+            discord_params = {'content' =>"<@#{assigned_to_id}>```#{msg}```"}
             discord_params["username"]= RedmineMessenger.settings[:messenger_username]
             discord_params["avatar_url"]= RedmineMessenger.settings[:messenger_icon]
             return discord_params

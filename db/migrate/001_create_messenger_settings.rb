@@ -22,6 +22,9 @@ class CreateMessengerSettings < ActiveRecord::Migration[4.2]
       t.integer :post_contact_updates, default: 0, null: false
       t.integer :post_password, default: 0, null: false
       t.integer :post_password_updates, default: 0, null: false
+      t.text :redmineid_discord_user
+
+      
     end
   end
 end
