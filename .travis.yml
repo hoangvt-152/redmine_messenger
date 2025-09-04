@@ -1,0 +1,47 @@
+language: ruby
+os: linux
+dist: xenial
+
+rvm:
+  - 2.6.6
+  - 2.5.8
+  - 2.4.9
+
+services:
+  - mysql
+  - postgresql
+
+env:
+  - REDMINE_VER=4.0-stable DB=postgresql
+  - REDMINE_VER=master DB=postgresql
+  - REDMINE_VER=4.0-stable DB=mysql
+  - REDMINE_VER=master DB=mysql
+
+notifications:
+  webhooks:
+    urls:
+      secure: "lwJzu9BU7AVhHnROzEA6agagwsqVAaTzgtvwTlw4CwSUv0ypNXNi9kjJUvOgSit3BnkSccC9xYlYNOYw5OOmsmjyUDU4/LUVqd0DRQjW3FXU9EFFPGQq9srJikHOHobfnutxGwMYFE4ftLI08PzsL7bYEg39Ps3pwwWsiIKnKKI0DPmdQH5PzC63jF/EByrLZsfqGHOirgXDnxmwgmrQ14vOpp3lHjgNgx9wNALpSgAztKeK1Wd8KayLYXweu+LQx9IwJfLqvk6hhWW15vjkIhvK7ooYSGXx+Hlwg3jyFSyX5jButUT4vwlWdJeAoNO/sWpdKXv4AifGXYsbcF/LMHCaaVgwBm/pe/YlK2LrqFlpm7MFuqyO1w4AnIA7rC8wZp/dUU5bJITZgN3sTAbLyTIbF8cbMfbDy3IWP8Oub7K/0ATUD7vNBVuyxfdGG61xOv/RDQhzrGwUArJ/xJfdU77MZkQUnaGb0vcwmRLIxyPdZWPz9ntzCbBxFblPWApCw+CWOeM3OuR6tdVqSVuZx3aG87TTzW+S9lLe8PJ5HYgA6+rPkc04zolJMftnFVlUl3LQIKvV2QkPSnr9bcePR5YSoJJKLBVofUsg/btVkQ1OxhWn53Td/nQp7u8qosmyQjCjMiP6Po1e9Enr89FY8Yxkw2dQba5sumQRbB39bj0="
+    on_success: change
+    on_failure: always
+
+before_install:
+  - export PLUGIN_NAME=redmine_messenger
+  - export REDMINE_GIT_REPO=git://github.com/redmine/redmine.git
+  - export REDMINE_PATH=$HOME/redmine
+  - export BUNDLE_GEMFILE=$REDMINE_PATH/Gemfile
+  - export RAILS_ENV=test
+  - git clone $REDMINE_GIT_REPO $REDMINE_PATH
+  - cd $REDMINE_PATH
+  - if [[ "$REDMINE_VER" != "master" ]]; then git checkout -b $REDMINE_VER origin/$REDMINE_VER; fi
+  - if [[ "$REDMINE_VER" != "master" ]]; then cp $TRAVIS_BUILD_DIR/test/support/Gemfile.local $REDMINE_PATH; fi
+  - ln -s $TRAVIS_BUILD_DIR $REDMINE_PATH/plugins/$PLUGIN_NAME
+  - cp $TRAVIS_BUILD_DIR/test/support/additional_environment.rb $REDMINE_PATH/config/
+  - cp $TRAVIS_BUILD_DIR/test/support/database-$DB-travis.yml $REDMINE_PATH/config/database.yml
+
+before_script:
+  - bundle exec rake db:create db:migrate redmine:plugins:migrate
+
+script:
+  - if [[ "$REDMINE_VER" != "master" ]] && [[ "$DB" == "postgresql" ]]; then rubocop plugins/$PLUGIN_NAME; fi
+  - bundle exec rake redmine:plugins:test NAME=$PLUGIN_NAME RUBYOPT="-W0"
+  - bundle exec rake redmine:plugins:migrate NAME=$PLUGIN_NAME VERSION=0

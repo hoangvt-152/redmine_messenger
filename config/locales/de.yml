@@ -1,6 +1,7 @@
 # German strings
 de:
   default_mentionsl_info: Benutzer, die immer mit Mentions benachrichtet werden sollen. Mehrere Namen können mit Komma getrennt angegeben werden (z.B. @all, @here).
+  error_messenger_invalid_url: "ist keine gültige URL"
   label_messenger_contact_created: "%{project_url} - Kontakt %{url} erstellt von *%{user}*"
   label_messenger_contact_updated: "%{project_url} - Kontakt %{url} aktualisiert von *%{user}*"
   label_messenger_db_entry_created: "%{project_url} - DB Eintrag %{url} erstellt von *%{user}*"
@@ -9,10 +10,11 @@ de:
   label_messenger_issue_created: "%{project_url} - Ticket %{url} erstellt von *%{user}*"
   label_messenger_issue_updated: "%{project_url} - Ticket %{url} aktualisiert von *%{user}*"
   label_messenger_outgoing_webhook: Ausgehender Webhook
-  label_messenger_password_created: "%{project_url} - Passwort %{url} erstellt von *%{user}*"
-  label_messenger_password_updated: "%{project_url} - Passwort %{url} aktualisiert von *%{user}*"
+  label_messenger_password_created: "%{project_url} - Kennwort %{url} erstellt von *%{user}*"
+  label_messenger_password_updated: "%{project_url} - Kennwort %{url} aktualisiert von *%{user}*"
   label_messenger_project_text_field_info: Leer lassen für Systemstandard.
   label_messenger_setting: Messenger Einstellung
+  label_messenger_settings_default: Standardeinstellung
   label_messenger_settings_disabled: Deaktiviert
   label_messenger_settings_enabled: Aktiviert
   label_messenger_wiki_created: "%{project_url} - Wiki %{url} erstellt von *%{user}*"

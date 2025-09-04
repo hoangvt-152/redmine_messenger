@@ -1,6 +1,7 @@
 # French strings
 fr:
   default_mentionsl_info: Personnes à notifier par défaut, séparées par des virgules (@all, @here)
+  error_messenger_invalid_url: n'est pas une URL valide
   label_messenger_contact_created: "%{project_url} - Le contact %{url} créé par *%{user}*"
   label_messenger_contact_updated: "%{project_url} - Le contact %{url} mis à jour par *%{user}*"
   label_messenger_db_entry_created: "%{project_url} - Entrée de base de données %{url} créée par *%{user}*"
@@ -13,6 +14,7 @@ fr:
   label_messenger_password_updated: "%{project_url} - Mot de passe %{url} mis à jour par *%{user}*"
   label_messenger_project_text_field_info: Laissez ce champ vide pour le système par défaut.
   label_messenger_setting: Paramètres de messagerie
+  label_messenger_settings_default: Choix de l'option
   label_messenger_settings_disabled: Désactivé
   label_messenger_settings_enabled: Activé
   label_messenger_wiki_created: "%{project_url} - Wiki %{url} créé par *%{user}*"

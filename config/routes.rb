@@ -1,7 +1,8 @@
-# frozen_string_literal: true
+# Plugin's routes
+# See: http://guides.rubyonrails.org/routing.html
 
-Rails.application.routes.draw do
-  resources :projects, only: [] do
-    resource :messenger_setting, only: %i[show update]
-  end
+# Don't create routes for repositories resources with only: []
+# do not override Redmine's routes.
+resources :projects, only: [] do
+  resource :messenger_setting, only: %i[show update]
 end

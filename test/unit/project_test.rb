@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require File.expand_path '../../test_helper', __FILE__
 
 class ProjectTest < ActiveSupport::TestCase
@@ -16,6 +14,7 @@ class ProjectTest < ActiveSupport::TestCase
            :members,
            :enabled_modules,
            :versions,
+           :wikis, :wiki_pages, :wiki_contents, :wiki_content_versions,
            :groups_users,
            :time_entries,
            :news, :comments,
@@ -23,17 +22,16 @@ class ProjectTest < ActiveSupport::TestCase
            :workflows
 
   def setup
-    User.current = User.find 1
+    User.current = User.find(1)
   end
 
   def test_create_project
     Project.delete_all
-    Project.create! name: 'Project Messenger', identifier: 'project-messenger'
-
+    Project.create!(name: 'Project Messenger', identifier: 'project-messenger')
     assert_equal 1, Project.count
   end
 
   def test_load_project
-    Project.find 1
+    Project.find(1)
   end
 end

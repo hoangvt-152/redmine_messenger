@@ -1,18 +1,21 @@
 # English strings
 en:
   default_mentionsl_info: Default people to notify, comma separated (e.g. @all, @here)
+  redmineid_discord_user: Ex (141:touyen,121:manhterry93)
+  error_messenger_invalid_url: is not a valid URL
   label_messenger_contact_created: "%{project_url} - Contact %{url} created by *%{user}*"
   label_messenger_contact_updated: "%{project_url} - Contact %{url} updated by *%{user}*"
   label_messenger_db_entry_created: "%{project_url} - DB entry %{url} created by *%{user}*"
   label_messenger_db_entry_updated: "%{project_url} - DB entry %{url} updated by *%{user}*"
   label_messenger_default_not_visible: Default setting is not visible for security reasons
-  label_messenger_issue_created: "%{project_url} - Issue %{url} created by *%{user}*"
-  label_messenger_issue_updated: "%{project_url} - Issue %{url} updated by *%{user}*"
+  label_messenger_issue_created: "%{project_url} -  %{url} created by *%{user}*"
+  label_messenger_issue_updated: "%{project_url} -  %{url} updated by *%{user}*"
   label_messenger_outgoing_webhook: Outgoing Webhook
   label_messenger_password_created: "%{project_url} - Password %{url} created by *%{user}*"
   label_messenger_password_updated: "%{project_url} - Password %{url} updated by *%{user}*"
   label_messenger_project_text_field_info: Leave it blank for system default.
   label_messenger_setting: Messenger Settings
+  label_messenger_settings_default: System default
   label_messenger_settings_disabled: Disabled
   label_messenger_settings_enabled: Enabled
   label_messenger_wiki_created: "%{project_url} - Wiki %{url} created by *%{user}*"
@@ -20,6 +23,8 @@ en:
   label_messenger: Messenger
   label_settings_auto_mentions: Convert names to mentions?
   label_settings_default_mentions: Default people for mentions
+  label_settings_redmineid_discord_user: Mapping redmineId to discord username
+
   label_settings_display_watchers: Display watchers?
   label_settings_messenger_channel: Messenger Channel
   label_settings_messenger_icon: Messenger Icon
@@ -42,7 +47,7 @@ en:
   label_settings_post_wiki_updates: Wiki updates?
   label_settings_post_wiki: Post Wiki added?
   label_settings_updated_include_description: Description in update issue?
-  messenger_channel_info_html: 'Here you have to specify the channel, which should be used. You can define multiple channels, seperated by comma'
+  messenger_channel_info_html: 'Here you have to specify the channel, which should be used. You can define multible channels, seperated by comma'
   messenger_contacts_intro: Activate the changes for Issues that should be sent to the pre-defined Messenger channel.
   messenger_db_intro: Activate the changes for DB that should be sent to the pre-defined Messenger channel.
   messenger_issue_intro: Activate the changes for Issues that should be sent to the pre-defined Messenger channel.
@@ -51,6 +56,6 @@ en:
   messenger_settings_project_intro: "If you left empty the Messenger URL in the administration area in case to be not globally notified by all project changes you can configure your Messenger URL in the project settings."
   messenger_url_info_html: 'Generate an <a target="_blank" href="https://github.com/AlphaNodes/redmine_messenger#prepare-your-messenger-service">Incoming WebHook</a> URL from the messenger service. Leave it empty, if you only want to activate specific projects with project based settings'
   messenger_verify_ssl_info_html: 'If your Messenger service uses an invalid or self-signed SSL certificate, disable it.'
-  messenger_direct_users_messages_info_html: 'If enabled Messenger will post http requests to each user as channel (direct message in RocketChat) along with post in channel'
+  messenger_direct_users_messages_info_html: 'If enabled Messenger will post http requests to each user as channel(direct message in RocketChat) along with post in channel'
   messenger_wiki_intro: Activate the changes for Wikis that should be sent to the pre-defined Messenger channel.
   permission_manage_messenger: Manage messenger

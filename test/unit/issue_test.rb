@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require File.expand_path '../../test_helper', __FILE__
 
 class IssueTest < ActiveSupport::TestCase
@@ -23,10 +21,9 @@ class IssueTest < ActiveSupport::TestCase
   end
 
   def test_create
-    issue = Issue.new project_id: 1, tracker_id: 1, author_id: 3, subject: 'test_create'
-
-    assert_save issue
+    issue = Issue.new(project_id: 1, tracker_id: 1, author_id: 3, subject: 'test_create')
+    assert issue.save
     assert_equal issue.tracker.default_status, issue.status
-    assert_nil issue.description
+    assert issue.description.nil?
   end
 end

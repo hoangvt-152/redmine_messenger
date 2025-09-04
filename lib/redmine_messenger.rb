@@ -1,33 +1,41 @@
-# frozen_string_literal: true
-
 module RedmineMessenger
-  VERSION = '1.0.15'
-  REDMINE_CONTACTS_SUPPORT = Redmine::Plugin.installed? 'redmine_contacts'
-  REDMINE_DB_SUPPORT = Redmine::Plugin.installed? 'redmine_db'
-
-  include RedminePluginKit::PluginBase
+  REDMINE_CONTACTS_SUPPORT = Redmine::Plugin.installed?('redmine_contacts') ? true : false
+  REDMINE_DB_SUPPORT = Redmine::Plugin.installed?('redmine_db') ? true : false
+  # this does not work at the moment, because redmine loads passwords after messener plugin
+  REDMINE_PASSWORDS_SUPPORT = Redmine::Plugin.installed?('redmine_passwords') ? true : false
 
   class << self
-    private
-
     def setup
       # Patches
-      loader.add_patch %w[Issue
-                          Project
-                          WikiPage]
-
-      loader.add_patch 'Contact' if RedmineMessenger::REDMINE_CONTACTS_SUPPORT
-      loader.add_patch 'DbEntry' if RedmineMessenger::REDMINE_DB_SUPPORT
-      loader.add_patch 'Password' if Redmine::Plugin.installed? 'redmine_passwords'
-
-      # Helper
-      loader.add_helper [{ controller: 'Projects', helper: 'MessengerProjects' }]
+      Issue.include RedmineMessenger::Patches::IssuePatch
+      WikiPage.include RedmineMessenger::Patches::WikiPagePatch
+      ProjectsController.send :helper, MessengerProjectsHelper
+      Contact.include(RedmineMessenger::Patches::ContactPatch) if RedmineMessenger::REDMINE_CONTACTS_SUPPORT
+      DbEntry.include(RedmineMessenger::Patches::DbEntryPatch) if RedmineMessenger::REDMINE_DB_SUPPORT
+      Password.include(RedmineMessenger::Patches::PasswordPatch) if Redmine::Plugin.installed?('redmine_passwords')
 
       # Global helpers
-      loader.add_global_helper RedmineMessenger::Helpers
+      ActionView::Base.include RedmineMessenger::Helpers
 
-      # Apply patches and helper
-      loader.apply!
+      # Hooks
+      require_dependency 'redmine_messenger/hooks'
+    end
+
+    def settings
+      if Setting[:plugin_redmine_messenger].class == Hash
+        new_settings = ActiveSupport::HashWithIndifferentAccess.new(Setting[:plugin_redmine_messenger])
+        Setting.plugin_redmine_messenger = new_settings
+        new_settings
+      else
+        # Rails 5 uses ActiveSupport::HashWithIndifferentAccess
+        Setting[:plugin_redmine_messenger]
+      end
+    end
+
+    def setting?(value)
+      return true if settings[value].to_i == 1
+
+      false
     end
   end
 end

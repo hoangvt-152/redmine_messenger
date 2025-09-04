@@ -1,6 +1,6 @@
-# frozen_string_literal: true
+$VERBOSE = nil
 
-if ENV['COVERAGE']
+if ENV['JENKINS']
   require 'simplecov'
   SimpleCov.start :rails do
     add_filter 'init.rb'
@@ -15,12 +15,12 @@ module RedmineMessenger
     include ActionDispatch::TestProcess
 
     def self.prepare
-      Role.where(id: [1, 2]).find_each do |r|
+      Role.where(id: [1, 2]).each do |r|
         r.permissions << :view_issues
         r.save
       end
 
-      Project.where(id: [1, 2]).find_each do |project|
+      Project.where(id: [1, 2]).each do |project|
         EnabledModule.create project: project, name: 'issue_tracking'
       end
     end

@@ -1,13 +1,7 @@
 env:
   browser: true
   jquery: true
-extends:
-  - 'eslint:recommended'
-  - 'plugin:no-jquery/deprecated'
-plugins:
-  - no-jquery
-parserOptions:
-  ecmaVersion: 2019
+extends: 'eslint:recommended'
 rules:
   indent:
     - error
