@@ -62,6 +62,9 @@ module RedmineMessenger
           #                  user: author),
           #                channels, url, attachment: attachment, project: project
           begin
+          puts "======>>author:#{author.inspect}"
+          puts "======>>user:#{user.inspect}"
+
           msg = l(:label_messenger_issue_created,
                             project_url: Messenger.project_url_markdown(project),
                             url: send_messenger_mention_url(project, description),
@@ -73,7 +76,13 @@ module RedmineMessenger
               puts e.inspect
           end                  
         end
-
+=begin
+[Issue Updated] #{issue id} has been updated by @{creator}
+Subject: <tiêu đề> (hyperlink đến url của ticket luôn),
+Author: @{author} (tag chính xác),
+Assignee : @{người được giao}(tag chính xác),
+Comment : (nếu có)
+=end
         def send_messenger_update
           return if current_journal.nil?
           puts "============send_messenger_update START==============="
@@ -81,7 +90,6 @@ module RedmineMessenger
           puts "issue:#{self.inspect}"
           channels = Messenger.channels_for_project project
           url = Messenger.url_for_project project
-          puts ""
           if Messenger.setting_for_project(project, :messenger_direct_users_messages)
             notified_users.each do |user|
               channels.append "@#{user.login}" if user.login != current_journal.user.login
@@ -105,15 +113,24 @@ module RedmineMessenger
           fields.compact!
           attachment[:fields] = fields if fields.any?
           project_url = Messenger.project_url_markdown(project)
-          puts ""
-          msg = l(:label_messenger_issue_updated,
-                            project_url: Messenger.project_url_markdown(project),
-                            url: send_messenger_mention_url(project, description),
-                            user: current_journal.user)
+          
           begin
+            puts "======>>author:#{author.inspect}"
+            puts "======>>self:#{self.inspect}"
+             puts "======>>self:#{fields}"
+
+            #puts "======>>user:#{user.inspect}"
             map_redmin_uid_to_discord_uid =  Messenger.map_redmin_uid_to_discord_uid
-            discord_mention_userId = map_redmin_uid_to_discord_uid[self.assigned_to_id.to_s]
-            Messenger.send_to_discord(url,build_discord_params(discord_mention_userId,msg))
+            assigned_discord_user_id = map_redmin_uid_to_discord_uid[self.assigned_to_id.to_s]
+            creator_discord_user_id = map_redmin_uid_to_discord_uid[author.id.to_s]
+
+            msg = l(:label_messenger_issue_updated,issue_id:"#{Messenger.markup_format self}",
+                  creator: current_journal.user,
+                  subject:send_messenger_mention_url(project, description),
+                  author:creator_discord_user_id,
+                  assigned_user:assigned_discord_user_id,
+                  comment:current_journal.notes)
+            Messenger.send_to_discord(url,build_discord_params(assigned_discord_user_id,msg))
           rescue =>e
             puts "Test"
             puts e.inspect
@@ -125,7 +142,7 @@ module RedmineMessenger
 
         private
         def build_discord_params(assigned_to_id,msg)
-            discord_params = {'content' =>"<@#{assigned_to_id}>```#{msg}```"}
+            discord_params = {'content' =>msg}
             discord_params["username"]= RedmineMessenger.settings[:messenger_username]
             discord_params["avatar_url"]= RedmineMessenger.settings[:messenger_icon]
             return discord_params
@@ -137,7 +154,9 @@ module RedmineMessenger
              Messenger.textfield_for_project(project, :default_mentions).present?
             mention_to = Messenger.mentions project, text
           end
-          "#{Messenger.markup_format self}#{mention_to}|#{Messenger.object_url self} "
+          puts "===========mention_to:#{mention_to}"
+          puts "===========Messenger.markup_format self:#{Messenger.markup_format self}"
+          "[#{Messenger.markup_format self}#{mention_to}](#{Messenger.object_url self}) "
         end
       end
     end
