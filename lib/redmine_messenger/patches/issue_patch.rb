@@ -62,16 +62,17 @@ module RedmineMessenger
           #                  user: author),
           #                channels, url, attachment: attachment, project: project
           begin
-          puts "======>>author:#{author.inspect}"
-          puts "======>>user:#{user.inspect}"
+            map_redmin_uid_to_discord_uid =  Messenger.map_redmin_uid_to_discord_uid
+            assigned_discord_user_id = map_redmin_uid_to_discord_uid[self.assigned_to_id.to_s]
+            creator_discord_user_id = map_redmin_uid_to_discord_uid[author.id.to_s]
 
-          msg = l(:label_messenger_issue_created,
-                            project_url: Messenger.project_url_markdown(project),
-                            url: send_messenger_mention_url(project, description),
-                            user: author)
-          map_redmin_uid_to_discord_uid =  Messenger.map_redmin_uid_to_discord_uid
-          discord_mention_userId = map_redmin_uid_to_discord_uid[self.assigned_to_id.to_s]
-          Messenger.send_to_discord(url,build_discord_params(discord_mention_userId,msg))
+            msg = l(:label_messenger_issue_created,issue_id:"#{Messenger.markup_format self}",
+                  creator: author,
+                  subject:send_messenger_mention_url(project, description),
+                  author:creator_discord_user_id,
+                  assigned_user:assigned_discord_user_id)
+                  
+            Messenger.send_to_discord(url,build_discord_params(assigned_discord_user_id,msg))
           rescue => e 
               puts e.inspect
           end                  
