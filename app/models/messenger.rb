@@ -11,8 +11,9 @@ class Messenger
       #       packages on os level
       #
       # Redmine::WikiFormatting.html_parser.to_text(text)
-
+      puts "==========>>text 1:#{text}"  
       text = +text.to_s
+      puts "==========>>text 2:#{text}"  
 
       # @see https://api.slack.com/reference/surfaces/formatting#escaping
 
